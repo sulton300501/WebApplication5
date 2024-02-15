@@ -1,6 +1,8 @@
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using System.Xml.Linq;
+using WebApplication5.Models;
 
 namespace WebApplication5.Controllers
 {
@@ -12,10 +14,34 @@ namespace WebApplication5.Controllers
 
         [HttpGet]
         [Route("apiget")]
-        public string Get()
+        public List<Experiment> Get()
         {
-            return "Malumotim boryapti";
-           
+            const string CONNECTSTRING = "Server=127.0.0.1;Port=5432;Database=ulash;User Id=postgres;Password=sulton";
+
+            NpgsqlConnection connection = new NpgsqlConnection(CONNECTSTRING);
+
+
+            string query = "select * from person";
+
+            return connection.Query<Experiment>(query).ToList();
+
+
+        }
+
+        [HttpGet]
+        [Route("apigetBYname")]
+        public List<Experiment> GetByName(string name)
+        {
+            const string CONNECTSTRING = "Server=127.0.0.1;Port=5432;Database=ulash;User Id=postgres;Password=sulton";
+
+            NpgsqlConnection connection = new NpgsqlConnection(CONNECTSTRING);
+
+
+            string query = "select * from person where name=@name" ;
+
+            return connection.Query<Experiment>(query,new {Name=name}).ToList();
+
+
         }
 
 
