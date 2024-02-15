@@ -12,6 +12,11 @@ namespace WebApplication5.Controllers
     {
 
 
+
+
+
+
+
         [HttpGet]
         [Route("apiget")]
         public List<Experiment> Get()
@@ -28,6 +33,91 @@ namespace WebApplication5.Controllers
 
         }
 
+
+
+        [HttpPost]
+        public ExperimentDTO CreateDataWithDapper(ExperimentDTO viewModel)
+        {
+            const string CONNECTSTRING = "Server=127.0.0.1;Port=5432;Database=ulash;User Id=postgres;Password=sulton";
+            string query = "insert into person(name) values(@name)";
+
+            NpgsqlConnection connection = new NpgsqlConnection(CONNECTSTRING);
+
+            connection.Execute(query, new ExperimentDTO
+            {
+                Name = viewModel.Name
+            });
+
+            return viewModel;
+
+        }
+
+        [HttpPut]
+        public ExperimentDTO UpdateDataWithDapper(int id ,ExperimentDTO viewModel)
+        {
+            const string CONNECTSTRING = "Server=127.0.0.1;Port=5432;Database=ulash;User Id=postgres;Password=sulton";
+            string query = "update person set name=@name where id=@id";
+
+            NpgsqlConnection connection = new NpgsqlConnection(CONNECTSTRING);
+
+            connection.Execute(query, new ExperimentDTO
+            {
+                Name = viewModel.Name
+
+            });
+
+            return viewModel;
+
+        }
+
+        [HttpPatch]
+        public int UpdateDataPatchWithDapper(int id, ExperimentDTO viewModel)
+        {
+            const string CONNECTSTRING = "Server=127.0.0.1;Port=5432;Database=ulash;User Id=postgres;Password=sulton";
+            string query = "update person set name=@name where id=@id";
+
+            NpgsqlConnection connection = new NpgsqlConnection(CONNECTSTRING);
+
+            var x= connection.Execute(query, new 
+            {
+                Name = viewModel.Name ,
+                Id = id
+
+            });
+
+            return x;
+
+        }
+
+
+        [HttpDelete]
+        [HttpPatch]
+        public int UpdateDataDeleteWithDapper(int id, ExperimentDTO viewModel)
+        {
+            const string CONNECTSTRING = "Server=127.0.0.1;Port=5432;Database=ulash;User Id=postgres;Password=sulton";
+            string query = "delete from person where id=@id";
+
+            NpgsqlConnection connection = new NpgsqlConnection(CONNECTSTRING);
+
+            var x = connection.Execute(query, new
+            {
+               
+                Id = id
+
+            });
+
+            return x;
+
+        }
+
+
+
+
+
+
+
+
+
         [HttpGet]
         [Route("apigetBYname")]
         public List<Experiment> GetByName(string name)
@@ -43,6 +133,8 @@ namespace WebApplication5.Controllers
 
 
         }
+
+
 
 
         [HttpPost]
